@@ -3,7 +3,7 @@ console.log("working");
 
 // Create the map object with a center and zoom level.
 // Center on LA
-let map = L.map('mapid').setView([34.0522, -118.2437], 14);
+let map = L.map('mapid').setView([34.0522, -118.2437], 4);
 
 /*
 //  Add a marker to the map for Los Angeles, California.
@@ -16,6 +16,15 @@ L.circle([34.0522, -118.2437], {
     radius: 100
  }).addTo(map);
 */
+
+// Get data from cities.js
+let cityData = cities;
+
+  // Loop through the cities array and create one marker for each city.
+cityData.forEach(function(city) {
+    console.log(city)
+    L.marker(city.location).addTo(map);
+});
 
 // create a light-yellow circle with black lines indicating 
 // a 300-pixel radius on a dark map
