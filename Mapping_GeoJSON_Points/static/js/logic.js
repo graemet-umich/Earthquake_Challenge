@@ -1,8 +1,13 @@
 // Add console.log to check to see if our code is working.
 console.log("working");
 
+/*
 // Create the map object with center at the San Francisco airport.
 let map = L.map('mapid').setView([37.5, -122.5], 10);
+*/
+
+// Create the map object with center and zoom level.
+let map = L.map('mapid').setView([30, 30], 2);
 
 // Add GeoJSON data.
 let sanFranAirport =
@@ -24,6 +29,7 @@ let sanFranAirport =
             "coordinates":[-122.375,37.61899948120117]}}
 ]};
 
+/*
 // Grabbing our GeoJSON data.
 L.geoJSON(sanFranAirport, {
     /* 
@@ -34,6 +40,7 @@ L.geoJSON(sanFranAirport, {
         .bindPopup("<h2>" + feature.properties.city + "</h2>");
     }
     */
+/*
     // Example 2: 
     onEachFeature: function(feature, layer) {
         console.log(layer);
@@ -41,6 +48,7 @@ L.geoJSON(sanFranAirport, {
                         "</h2> <hr> <h2>" + 'Airport Name: ' + feature.properties.name + "</h2>");
     }
 }).addTo(map);
+*/
 
 /*
 // Coordinates for each point to be used in the polyline.
@@ -99,7 +107,7 @@ L.circleMarker([34.0522, -118.2437], {
 */
 
 // We create the tile layer that will be the background of our map.
-let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
@@ -107,3 +115,22 @@ attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap
 
 // Then we add our 'graymap' tile layer to the map.
 streets.addTo(map);
+
+// Accessing the airport GeoJSON URL
+// (Having the tileLayer() method before accessing large datasets 
+// ensures that the map gets loaded before the data is added to it.)
+let airportData = "https://raw.githubusercontent.com/graemet-umich/Earthquake_Challenge/main/majorAirports.json";
+
+// Grabbing our GeoJSON data.
+d3.json(airportData).then(function(data) {
+    console.log(data);
+    // Creating a GeoJSON layer with the retrieved data.
+    L.geoJSON(data, {
+        onEachFeature: function(feature, layer) {
+            console.log(layer);
+            layer.bindPopup("<h2>" + 'Airport Code: ' + feature.properties.faa + 
+                            "</h2> <hr> <h2>" + 'Airport Name: ' + feature.properties.name + "</h2>");
+        }
+    }).addTo(map);
+});
+
